@@ -18,7 +18,7 @@ module ROT #(
     output logic [ROT_INDEX_WIDTH - 1 : 0] rot_index_rot 
 );
 
-logic [ROT_INDEX_WIDTH : 0] REORDER_TABLE [0 : ROT_DEPTH - 1]; //value 4 will be invalid
+logic [ROT_INDEX_WIDTH : 0] REORDER_TABLE [0 : ROT_DEPTH - 1]; //value 1000 will be invalid
 logic RECEIVED [0 : ROT_DEPTH - 1];
 logic [2 : 0] read_pointer;
 logic [2 : 0] write_pointer;
@@ -27,7 +27,7 @@ always_ff @(posedge clk) begin
     pop <= 0;
     if (reset) begin
         for (integer i = 0; i < ROT_DEPTH; i++) begin
-            REORDER_TABLE[i] <= 3'b100;
+            REORDER_TABLE[i] <= 4'b1000;
             RECEIVED[i] <= 0;
         end
         rot_index_rot <= 0;
@@ -46,13 +46,13 @@ always_ff @(posedge clk) begin
         rot_index_rot <= REORDER_TABLE[read_pointer];
         read_pointer <= read_pointer + 1;
         pop <= 1;
-        REORDER_TABLE[read_pointer] <= 3'b100;
+        REORDER_TABLE[read_pointer] <= 4'b1000;
     end
     else if (RECEIVED[read_pointer]) begin
         rot_index_rot <= REORDER_TABLE[read_pointer];
         read_pointer <= read_pointer + 1;
         pop <= 1;
-        REORDER_TABLE[read_pointer] <= 3'b100;
+        REORDER_TABLE[read_pointer] <= 4'b1000;
         RECEIVED[read_pointer] <= 0;
     end
     else if (response && axi_id_response == 2'b00) begin

@@ -151,6 +151,15 @@ module tb_top;
 
         @(posedge clk);
 
+        response = 1;
+        axi_id_response = 2'b00;
+        rot_index_response = 2'b01;
+        data_in = 32'h0000_00FF;
+        @(posedge clk);
+        response = 0;
+
+        @(posedge clk);
+
 
         repeat(5)@(posedge clk);
         $finish;
